@@ -15,41 +15,42 @@ let map, mapEvent;
 
 class App {
   // private instance properites
-  #map; 
-  #mapEvent; 
+  #map;
+  #mapEvent;
 
   constructor() {
     this._getPosition();
   }
 
-  _getPosition(){
+  _getPosition() {
     if (navigator.geolocation)
-  navigator.geolocation.getCurrentPosition(this._loadMap.bind(this), function () {
-      alert('Could not get your positiion');
-    });
+      navigator.geolocation.getCurrentPosition(this._loadMap.bind(this), function () {
+          alert('Could not get your positiion');
+        });
   }
 
   _loadMap(position) {
-      const { latitude, longitude } = position.coords;
-      console.log(`https://www.google.com/maps/@${latitude},${longitude}`);
+    const { latitude } = position.coords;
+    const { longitude } = position.coords;
+    console.log(`https://www.google.com/maps/@${latitude},${longitude}`);
 
-      const coords = [latitude, longitude];
+    const coords = [latitude, longitude];
 
-      console.log(this);
-      this.#map = L.map('map').setView(coords, 13);
-      // console.log(map);
+    console.log(this);
+    this.#map = L.map('map').setView(coords, 13);
+    // console.log(map);
 
-      L.tileLayer('https://{s}.tile.openstreetmap.fr/hot//{z}/{x}/{y}.png', {
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      }).addTo(this.#map);
+    L.tileLayer('https://{s}.tile.openstreetmap.fr/hot//{z}/{x}/{y}.png', {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(this.#map);
 
-      // Handling clicks on map
-      this.#map.on('click', function (mapE) {
-        this.#mapEvent = mapE;
-        form.classList.remove('hidden');
-        inputDistance.focus();
-      });
+    // Handling clicks on map
+    this.#map.on('click', function (mapE) {
+      this.#mapEvent = mapE;
+      form.classList.remove('hidden');
+      inputDistance.focus();
+    });
   }
 
   _showFrom() {}
@@ -57,7 +58,6 @@ class App {
   _toggleElevationField() {}
 
   _newWorkout() {}
-
 }
 
 const app = new App();
@@ -91,7 +91,6 @@ form.addEventListener('submit', function (e) {
 });
 
 inputType.addEventListener('change', function () {
-    inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
-    inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
+  inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
+  inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
 });
-
