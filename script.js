@@ -20,13 +20,24 @@ class App {
 
   constructor() {
     this._getPosition();
+    form.addEventListener('submit', this._newWorkout.bind(this));
+
+    inputType.addEventListener('change', function () {
+      inputElevation
+        .closest('.form__row')
+        .classList.toggle('form__row--hidden');
+      inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
+    });
   }
 
   _getPosition() {
     if (navigator.geolocation)
-      navigator.geolocation.getCurrentPosition(this._loadMap.bind(this), function () {
+      navigator.geolocation.getCurrentPosition(
+        this._loadMap.bind(this),
+        function () {
           alert('Could not get your positiion');
-        });
+        }
+      );
   }
 
   _loadMap(position) {
@@ -46,51 +57,42 @@ class App {
     }).addTo(this.#map);
 
     // Handling clicks on map
-    this.#map.on('click', function (mapE) {
-      this.#mapEvent = mapE;
-      form.classList.remove('hidden');
-      inputDistance.focus();
-    });
+    this.#map.on('click', this._showFrom.bind(this));
   }
 
-  _showFrom() {}
+  _showFrom(mapE) {
+    this.#mapEvent = mapE;
+    form.classList.remove('hidden');
+    inputDistance.focus();
+  }
 
   _toggleElevationField() {}
 
-  _newWorkout() {}
+  _newWorkout(e) {
+    e.preventDefault();
+
+    // Clear input fields
+    inputDistance.value = inputDuration.value = inputCadence.value = inputElevation.value =
+      '';
+
+    // Display Marker
+    const { lat, lng } = mapEvent.latlng;
+
+    L.marker([lat, lng])
+      .addTo(this.#map)
+      .bindPopup(
+        L.popup({
+          maxWidth: 250,
+          minWidth: 100,
+          autoClose: false,
+          closeOnClick: false,
+          className: 'running-popup',
+        })
+      )
+
+      .setPopupContent('Workout')
+      .openPopup();
+  }
 }
 
 const app = new App();
-app._getPosition();
-
-form.addEventListener('submit', function (e) {
-  e.preventDefault();
-
-  // Clear input fields
-  inputDistance.value = inputDuration.value = inputCadence.value = inputElevation.value =
-    '';
-
-  // Display Marker
-  console.log(mapEvent);
-  const { lat, lng } = mapEvent.latlng;
-
-  L.marker([lat, lng])
-    .addTo(map)
-    .bindPopup(
-      L.popup({
-        maxWidth: 250,
-        minWidth: 100,
-        autoClose: false,
-        closeOnClick: false,
-        className: 'running-popup',
-      })
-    )
-
-    .setPopupContent('Workout')
-    .openPopup();
-});
-
-inputType.addEventListener('change', function () {
-  inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
-  inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
-});
