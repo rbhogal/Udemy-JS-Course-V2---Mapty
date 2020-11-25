@@ -120,12 +120,12 @@ class App {
   }
 
   _hideForm() {
-    // Empty inputs 
+    // Empty inputs
     inputDistance.value = inputDuration.value = inputCadence.value = inputElevation.value =
       '';
-      form.style.display = 'none';
-      form.classList.add('hidden');
-      setTimeout(() => form.style.display = 'grid', 1000);
+    form.style.display = 'none';
+    form.classList.add('hidden');
+    setTimeout(() => (form.style.display = 'grid'), 1000);
   }
 
   _toggleElevationField() {
@@ -203,7 +203,9 @@ class App {
         })
       )
 
-      .setPopupContent('workout')
+      .setPopupContent(
+        `${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.description}`
+      )
       .openPopup();
   }
 
@@ -216,9 +218,11 @@ class App {
             workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'
           }</span>
           <span class="workout__value">${workout.distance}</span>
+          <span class="workout__unit">km</span>
+        </div>
         <div class="workout__details">
           <span class="workout__icon">⏱</span>
-          <span class="workout__value">${workout.distance}</span>
+          <span class="workout__value">${workout.duration}</span>
           <span class="workout__unit">min</span>
         </div>
     `;
@@ -253,7 +257,7 @@ class App {
       </li> 
       `;
 
-      form.insertAdjacentHTML('afterend', html);
+    form.insertAdjacentHTML('afterend', html);
   }
 }
 
